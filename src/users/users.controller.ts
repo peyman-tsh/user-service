@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from './commands/create-user.command';
 import { GetUserQuery } from './queries/get-user.query';
@@ -13,8 +13,10 @@ export class UsersController {
     private readonly queryBus: QueryBus,
   ) {}
 
-  @MessagePattern({ cmd: 'create_user' })
+  @EventPattern({ cmd: 'createUser' })
   async createUser(@Payload() createUserDto: CreateUserDto): Promise<IUserResponse> {
+    console.log('in user micro');
+    
     const user = await this.commandBus.execute(new CreateUserCommand(createUserDto));
     return this.mapToResponse(user);
   }
