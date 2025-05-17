@@ -6,12 +6,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UsersModule } from './users/users.module';
 import { UsersController } from './users/users.controller';
 import configuration from './config/configuration';
-import { CreateUserHandler } from './users/commands/handlers/create-user.handler';
-import { GetUserHandler } from './users/queries/handlers/get-user.handler';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus, CqrsModule, QueryBus } from '@nestjs/cqrs';
 
 @Module({
   imports: [
+    CqrsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
@@ -48,6 +47,6 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
     UsersModule,
   ],
   controllers: [UsersController],
-  providers: [CreateUserHandler,GetUserHandler,CommandBus,QueryBus],
+  providers: [CommandBus, QueryBus],
 })
 export class AppModule {} 

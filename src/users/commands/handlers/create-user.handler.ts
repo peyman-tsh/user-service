@@ -23,7 +23,6 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       ...createUserDto,
       password: hashedPassword,
     });
-
     return user;
   }
 } 

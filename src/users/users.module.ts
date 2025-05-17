@@ -9,6 +9,7 @@ import { MongodbRepository } from './repositories/mongodb.repository';
 import { CreateUserHandler } from './commands/handlers/create-user.handler';
 import { GetUserHandler } from './queries/handlers/get-user.handler';
 import { UsersController } from './users.controller';
+import { UserService } from './users.service';
 
 const CommandHandlers = [CreateUserHandler];
 const QueryHandlers = [GetUserHandler];
@@ -25,7 +26,8 @@ const QueryHandlers = [GetUserHandler];
     MongodbRepository,
     ...CommandHandlers,
     ...QueryHandlers,
+    UserService
   ],
-  exports: [MysqlRepository, MongodbRepository],
+  exports: [MysqlRepository, MongodbRepository,UserService],
 })
 export class UsersModule {} 

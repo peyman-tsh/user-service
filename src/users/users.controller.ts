@@ -1,25 +1,22 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
 import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from './commands/create-user.command';
 import { GetUserQuery } from './queries/get-user.query';
 import { CreateUserDto } from './dto/create-user.dto';
 import { IUserResponse } from './interfaces/user.interface';
+import { UserService } from './users.service';
 
-@Controller()
+@Controller('users')
 export class UsersController {
   constructor(
-    private readonly commandBus: CommandBus,
+    private readonly userService:UserService,
     private readonly queryBus: QueryBus,
   ) {}
-
-  @EventPattern({ cmd: 'createUser' })
+  @Post('create')
+  @MessagePattern({ cmd: 'createUser' })
   async createUser(@Payload() createUserDto: CreateUserDto): Promise<IUserResponse> {
-    console.log('in user micro');
-    
-    const user = await this.commandBus.execute(new CreateUserCommand(createUserDto));
-    return this.mapToResponse(user);
-  }
+   return await this.userService.createUser(createUserDto)
+ }
 
   @MessagePattern({ cmd: 'findById' })
   async getUser(@Payload() data: { id: string }): Promise<IUserResponse> {
@@ -41,7 +38,6 @@ export class UsersController {
     }
     return this.mapToResponse(user);
   }
-
   private mapToResponse(user: any): IUserResponse {
     const { password, ...userResponse } = user.toObject();
     return userResponse;

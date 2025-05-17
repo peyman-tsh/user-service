@@ -1,10 +1,11 @@
+import { User } from "src/users/entities/user.entity";
 export default () => ({
   port: parseInt(process.env.PORT, 10) || 3001,
   rabbitmq: {
     url: process.env.RABBITMQ_URL || 'amqp://localhost:5672',
     queue: process.env.RABBITMQ_QUEUE || 'user_queue',
     queueOptions: {
-      durable: process.env.RABBITMQ_QUEUE_DURABLE === 'true' || false
+      durable: false
     }
   },
   mongodb: {
@@ -22,6 +23,7 @@ export default () => ({
       username: process.env.MYSQL_USERNAME || 'root',
       password: process.env.MYSQL_PASSWORD || 'password',
       database: process.env.MYSQL_DATABASE || 'users',
+      entities:[User]
     },
     mongodb: {
       uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/users',

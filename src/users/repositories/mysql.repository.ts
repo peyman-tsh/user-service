@@ -14,11 +14,11 @@ export class MysqlRepository {
 
   async create(user: CreateUserDto): Promise<IUser> {
     const newUser = this.userRepository.create(user);
-    return this.userRepository.save(newUser);
+    return await this.userRepository.save(newUser);
   }
 
   async findByEmail(email: string): Promise<IUser | null> {
-    return this.userRepository.findOne({ where: { email } });
+    return await this.userRepository.findOne({ where: { email } });
   }
 
   async update(id: string, user: Partial<IUser>): Promise<IUser> {
