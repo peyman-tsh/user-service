@@ -7,6 +7,9 @@ import { UsersModule } from './users/users.module';
 import { UsersController } from './users/users.controller';
 import configuration from './config/configuration';
 import { CommandBus, CqrsModule, QueryBus } from '@nestjs/cqrs';
+import { APP_FILTER } from '@nestjs/core';
+import { RpcExceptionFilter } from './users/exception/exception.filter';
+import { HttpExceptionFilter } from './users/exception/httpException.filter';
 
 @Module({
   imports: [
@@ -47,6 +50,15 @@ import { CommandBus, CqrsModule, QueryBus } from '@nestjs/cqrs';
     UsersModule,
   ],
   controllers: [UsersController],
-  providers: [CommandBus, QueryBus],
+  providers: [CommandBus, QueryBus,
+    {
+      provide:APP_FILTER,
+      useClass:RpcExceptionFilter
+    },
+    {
+      provide:APP_FILTER,
+      useClass:HttpExceptionFilter
+    }
+  ],
 })
 export class AppModule {} 

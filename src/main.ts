@@ -16,7 +16,6 @@ async function bootstrap() {
       queueOptions: configService.get('rabbitmq.queueOptions'),
     },
   });
-
   await microservice.listen();
 }
 
