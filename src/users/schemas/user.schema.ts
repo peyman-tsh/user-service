@@ -9,10 +9,10 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({})
   password: string;
 
-  @Prop({ required: true })
+  @Prop({})
   fullName: string;
 
   @Prop({ required: true, enum: UserRole, default: UserRole.USER })

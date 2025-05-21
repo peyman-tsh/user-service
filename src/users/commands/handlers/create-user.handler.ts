@@ -4,10 +4,11 @@ import { MysqlRepository } from '../../repositories/mysql.repository';
 import { IUser } from '../../interfaces/user.interface';
 import { ConflictException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { MongodbRepository } from 'src/users/repositories/mongodb.repository';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
-  constructor(private readonly mysqlRepository: MysqlRepository) {}
+  constructor(private readonly mysqlRepository: MysqlRepository,private readonly mongodbRepository:MongodbRepository) {}
 
   async execute(command: CreateUserCommand): Promise<IUser> {
     const { createUserDto } = command;
@@ -23,6 +24,12 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
       ...createUserDto,
       password: hashedPassword,
     });
+    if(user){
+    await this.mongodbRepository.create({
+      ...createUserDto,
+      password:hashedPassword
+    })
+    }
     return user;
   }
 } 

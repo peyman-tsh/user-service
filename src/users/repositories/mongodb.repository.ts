@@ -9,6 +9,9 @@ export class MongodbRepository {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
+  async create(user:IUser):Promise<IUser>{
+    return await this.userModel.create(user);
+  }
 
   async findById(id: string): Promise<IUser | null> {
     return this.userModel.findById(id).exec();

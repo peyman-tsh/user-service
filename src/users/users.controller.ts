@@ -14,7 +14,7 @@ export class UsersController {
     private readonly userService:UserService,
     private readonly queryBus: QueryBus,
   ) {}
-  
+
   @MessagePattern({ cmd: 'createUser' })
   async createUser(@Payload() createUserDto: CreateUserDto): Promise<IUserResponse> {
    return await this.userService.createUser(createUserDto)
@@ -28,16 +28,7 @@ export class UsersController {
   @MessagePattern({ cmd: 'validateUser' })
   async validateUser(@Payload() data: { email: string; password: string }): Promise<IUserResponse> {
     // Find user by email for validation
-    const user = await this.queryBus.execute(new GetUserQuery(data.email));
-    if (!user) {
-      throw new Error('User not found');
-    }
-    // Here you should validate the password, e.g. using bcrypt
-    // For demonstration, assuming user.password is plain text (not recommended in production)
-    if (user.password !== data.password) {
-      throw new Error('Invalid credentials');
-    }
-    return this.mapToResponse(user);
+     return await this.userService.validateUser(data.email,data.password);
   }
   private mapToResponse(user: any): IUserResponse {
     const { password, ...userResponse } = user.toObject();

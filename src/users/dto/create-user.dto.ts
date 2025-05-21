@@ -1,4 +1,4 @@
-import { IsEmail, IsString, MinLength, IsEnum } from 'class-validator';
+import { IsEmail, IsString, MinLength, IsEnum, IsOptional, IsDate } from 'class-validator';
 import { UserRole } from '../interfaces/user.interface';
 
 export class CreateUserDto {
@@ -15,4 +15,10 @@ export class CreateUserDto {
 
   @IsEnum(UserRole)
   role: UserRole;
+
+  @IsDate()
+  createdAt:Date
+  
+  @IsDate()
+  updatedAt:Date
 } 
